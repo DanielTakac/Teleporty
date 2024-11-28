@@ -57,7 +57,17 @@ class Hrac:
                 else:
                     nove_y = nove_y + 1
 
-        # todo: check if nove_x/nove_y are the goal/out of bounds/start of a teleport/... and decide wheter to just move there or do something special
+        # kontrola ci nova pozicia nie je teleport/ciel/za cielom
+        if nove_x >= n:
+            print("temporary message (out of bounds)")
+            return
+        
+        for teleport in teleporty:
+            
+        
+        self.x = nove_x
+        self.y = nove_y
+
             
 
 class Teleport:
@@ -130,13 +140,20 @@ def main():
     # prvy vypis pola bez hracov
     vypis_pola(n, hraci, teleporty, False)
 
-    while True:
-
-        for hrac in hraci:
-            hrac.posun(n, teleporty)
-
+    hraci[0].posun(n, teleporty)
+    
+    if hraci[0].x == n - 1 and hraci[0].y == n - 1:
         vypis_pola(n, hraci, teleporty)
+        print(f"Hrac {0} temporary message (win)")
+        return
 
-        break
+    # while True:
+
+    #     for hrac in hraci:
+    #         hrac.posun(n, teleporty)
+
+    #     vypis_pola(n, hraci, teleporty)
+
+    #     break
 
 main()
