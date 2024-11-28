@@ -7,7 +7,7 @@ def hod_kockou():
         kocka = kocka + hod_kockou()
     return kocka
 
-def vypis_pola(n, hraci, teleporty):
+def vypis_pola(n, hraci, teleporty, vypisat_hracov=True):
     print("Hracie pole:")
     print(" ", end=" ")
     for i in range(n):
@@ -27,7 +27,7 @@ def vypis_pola(n, hraci, teleporty):
                 if teleport.x2 == i and teleport.y2 == j:
                     symbol = teleport.pismeno
             for hrac in hraci:
-                if hrac.x == i and hrac.y == j:
+                if vypisat_hracov and hrac.x == i and hrac.y == j:
                     symbol = hrac.id
             print(symbol, end=" ")
         print()
@@ -104,7 +104,7 @@ def main():
             x2 = random.randint(0, n - 1)
             y2 = random.randint(0, n - 1)
             if x2 > x1 and splna_podmienky(x1, y1, x2, y2, teleporty):
-                teleporty.append(Teleport("pozitivny", chr(65 + i), x1, y1, x2, y2)) # pismeno generujeme pomocou ASCII tabulky
+                teleporty.append(Teleport("pozitivny", chr(65 + i), x1, y1, x2, y2)) # pismeno generovane pomocou ASCII tabulky
                 break
 
     for i in range(pocet_neg_tp):
@@ -114,13 +114,17 @@ def main():
             x2 = random.randint(0, n - 1)
             y2 = random.randint(0, n - 1)
             if x2 < x1 and splna_podmienky(x1, y1, x2, y2, teleporty):
-                teleporty.append(Teleport("negativny", chr(97 + i), x1, y1, x2, y2)) # pismeno generujeme pomocou ASCII tabulky
+                teleporty.append(Teleport("negativny", chr(97 + i), x1, y1, x2, y2)) # pismeno generovane pomocou ASCII tabulky
                 break
+    
+    # pvy vypis pola bez hracov
+    vypis_pola(n, hraci, teleporty, False)
 
     while True:
 
-        vypis_pola(n, hraci, teleporty)
+        for hrac in hraci:
+            hrac.posun(n, teleporty)
 
-        break
+        vypis_pola(n, hraci, teleporty)
 
 main()
