@@ -41,6 +41,24 @@ class Hrac:
     def posun(self, n, teleporty):
         kocka = hod_kockou()
         print(f"Hrac {self.id} hodil {kocka}")
+        
+        nove_x = self.x
+        nove_y = self.y
+
+        for i in range(kocka):
+            if (nove_x + 1) % 2 == 0:
+                if nove_y == 0:
+                    nove_x = nove_x + 1
+                else:
+                    nove_y = nove_y - 1
+            else:
+                if nove_y == n - 1:
+                    nove_x = nove_x + 1
+                else:
+                    nove_y = nove_y + 1
+
+        # todo: check if nove_x/nove_y are the goal/out of bounds/start of a teleport/... and decide wheter to just move there or do something special
+            
 
 class Teleport:
     def __init__(self, typ, pismeno, x1, y1, x2, y2):
