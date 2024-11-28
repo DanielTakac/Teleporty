@@ -66,18 +66,6 @@ def main():
     
     # Vygenerovanie hraciej plochy
 
-    hraci = [
-        Hrac(1),
-        Hrac(2)
-    ]
-
-    # teleporty = [
-    #     Teleport("pozitivny", "A", 0, 4, 3, 0),
-    #     Teleport("pozitivny", "B", 1, 1, 2, 2),
-    #     Teleport("negativny", "a", 4, 2, 2, 3),
-    #     Teleport("negativny", "b", 3, 4, 0, 2)
-    # ]
-
     pocet_poz_tp = math.floor(n / 2)
     pocet_neg_tp = math.floor(n / 2)
 
@@ -93,8 +81,7 @@ def main():
                 splna = False
         
         return splna
-        
-
+    
     teleporty = []
 
     for i in range(pocet_poz_tp):
@@ -117,7 +104,12 @@ def main():
                 teleporty.append(Teleport("negativny", chr(97 + i), x1, y1, x2, y2)) # pismeno generovane pomocou ASCII tabulky
                 break
     
-    # pvy vypis pola bez hracov
+    hraci = []
+
+    for i in range(k):
+        hraci.append(Hrac(i + 1))
+
+    # prvy vypis pola bez hracov
     vypis_pola(n, hraci, teleporty, False)
 
     while True:
@@ -126,5 +118,7 @@ def main():
             hrac.posun(n, teleporty)
 
         vypis_pola(n, hraci, teleporty)
+
+        break
 
 main()
