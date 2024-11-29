@@ -31,6 +31,12 @@ def vypis_pola(n, hraci, teleporty, vypisat_hracov=True):
                     symbol = hrac.id
             print(symbol, end=" ")
         print()
+    print("============")
+
+def vypis_pozicii(hraci):
+    for hrac in hraci:
+        print(f"Hrac c. {hrac.id} [{hrac.x}, {hrac.y}]")
+    print("---")
 
 class Hrac:
     def __init__(self, id):
@@ -40,7 +46,7 @@ class Hrac:
 
     def posun(self, n, teleporty):
         kocka = hod_kockou()
-        print(f"Hrac {self.id} hodil {kocka}")
+        print(f"Hrac c. {self.id} hodil spolu na kocke: {kocka} bodov")
         
         nove_x = self.x
         nove_y = self.y
@@ -56,17 +62,24 @@ class Hrac:
                     nove_x = nove_x + 1
                 else:
                     nove_y = nove_y + 1
-
-        # kontrola ci nova pozicia nie je teleport/ciel/za cielom
+        
         if nove_x >= n:
-            print("temporary message (out of bounds)")
+            print(f"Hrac c. {self.id} hodil viac bodov nez je vzdialenost do ciela!")
             return
         
-        for teleport in teleporty:
-            
-        
+        print(f"Hrac c. {self.id} sa posuva na policko: [{nove_x}, {nove_y}]")
+
         self.x = nove_x
         self.y = nove_y
+
+        for teleport in teleporty:
+            if teleport.x1 == self.x and teleport.y1 == self.y:
+                self.x = teleport.x2
+                self.y = teleport.y2
+                print(f"Hrac c. {self.id} sa cez {teleport.typ} teleport '{teleport.pismeno}' posuva na policko: [{self.x}, {self.y}]")
+                return
+        
+        
 
             
 
@@ -140,20 +153,23 @@ def main():
     # prvy vypis pola bez hracov
     vypis_pola(n, hraci, teleporty, False)
 
-    hraci[0].posun(n, teleporty)
-    
-    if hraci[0].x == n - 1 and hraci[0].y == n - 1:
+    vypis_pozicii(hraci)
+
+    while True:
+
+        for hrac in hraci:
+            hrac.posun(n, teleporty)
+
+            # kontrola ci je hrac v cieli
+            if hrac.x == n - 1 and hrac.y == n - 1:
+                vypis_pola(n, hraci, teleporty)
+                print(f"Hrac {hrac.id} temporary message (win)")
+                return
+        
+
+
         vypis_pola(n, hraci, teleporty)
-        print(f"Hrac {0} temporary message (win)")
-        return
 
-    # while True:
-
-    #     for hrac in hraci:
-    #         hrac.posun(n, teleporty)
-
-    #     vypis_pola(n, hraci, teleporty)
-
-    #     break
+        break
 
 main()
