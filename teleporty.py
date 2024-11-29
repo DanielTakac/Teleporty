@@ -1,3 +1,5 @@
+# Skript riesi vsetky casti projektu (A + B + C), cize vykresli hracie pole a spusti simulaciu hry pre k hracov
+
 import random
 import math
 
@@ -19,7 +21,7 @@ def vypis_pola(n, hraci, teleporty, vypisat_hracov=True):
             symbol = "."
             if i == 0 and j == 0:
                 symbol = "+"
-            if i == n - 1 and j == n - 1:
+            if (n % 2 == 0 and i == n - 1 and j == 0) or (n % 2 != 0 and i == n - 1 and j == n - 1):
                 symbol = "*"
             for teleport in teleporty:
                 if teleport.x1 == i and teleport.y1 == j:
@@ -34,9 +36,16 @@ def vypis_pola(n, hraci, teleporty, vypisat_hracov=True):
     print("============")
 
 def vypis_pozicii(hraci):
+    print("Pozicie hracov:")
     for hrac in hraci:
         print(f"Hrac c. {hrac.id} [{hrac.x}, {hrac.y}]")
     print("---")
+
+def hrac_je_v_cieli(hrac, n):
+    # ciel je v prvom stlpci ak je n parne a v poslednom stlpci ak je n neparne
+    if (n % 2 == 0 and hrac.x == n - 1 and hrac.y == 0) or (n % 2 != 0 and hrac.x == n - 1 and hrac.y == n - 1):
+        return True
+    return False
 
 class Hrac:
     def __init__(self, id):
@@ -78,10 +87,6 @@ class Hrac:
                 self.y = teleport.y2
                 print(f"Hrac c. {self.id} sa cez {teleport.typ} teleport '{teleport.pismeno}' posuva na policko: [{self.x}, {self.y}]")
                 return
-        
-        
-
-            
 
 class Teleport:
     def __init__(self, typ, pismeno, x1, y1, x2, y2):
@@ -93,13 +98,13 @@ class Teleport:
         self.y2 = y2
 
 def main():
-    n = int(input("Zadajte rozmer hracej plochy: "))
+    n = int(input("Zadaj parameter n (velkost hracieho pola): "))
 
     if n < 5 or n > 10:
         print("Rozmer hracej plochy musi byt v rozsahu 5 az 10")
         return
     
-    k = int(input("Zadajte pocet hracov: "))
+    k = int(input("Zadaj parameter k (pocet hracov): "))
 
     if k < 1 or k > 4:
         print("Pocet hracov musi byt v rozsahu 1 az 4")
@@ -152,24 +157,18 @@ def main():
 
     # prvy vypis pola bez hracov
     vypis_pola(n, hraci, teleporty, False)
-
     vypis_pozicii(hraci)
 
     while True:
-
         for hrac in hraci:
             hrac.posun(n, teleporty)
 
-            # kontrola ci je hrac v cieli
-            if hrac.x == n - 1 and hrac.y == n - 1:
+            if hrac_je_v_cieli(hrac, n):
                 vypis_pola(n, hraci, teleporty)
-                print(f"Hrac {hrac.id} temporary message (win)")
+                print(f"Hrac c. {hrac.id} VYHRAL!")
                 return
-        
-
-
-        vypis_pola(n, hraci, teleporty)
-
-        break
+            
+            vypis_pola(n, hraci, teleporty)
+            vypis_pozicii(hraci)
 
 main()
